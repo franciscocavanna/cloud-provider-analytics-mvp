@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 600" font-family="Segoe UI, Arial, sans-serif">
+  <rect x="0" y="0" width="1160" height="600" fill="#fbfbfd"/>
+  <text x="30" y="38" font-size="22" font-weight="700" fill="#1a1a2e">Cloud Provider Analytics — Arquitectura del MVP</text>
+  <text x="30" y="60" font-size="13" fill="#555">Lambda con serving desacoplado · PySpark + Structured Streaming · Colab + AstraDB</text>
+
+  <!-- column headers -->
+  <text x="115" y="92" font-size="13" font-weight="700" fill="#777" text-anchor="middle">LANDING</text>
+  <text x="350" y="92" font-size="13" font-weight="700" fill="#a06a2c" text-anchor="middle">BRONZE</text>
+  <text x="585" y="92" font-size="13" font-weight="700" fill="#7a7a7a" text-anchor="middle">SILVER</text>
+  <text x="800" y="92" font-size="13" font-weight="700" fill="#b8860b" text-anchor="middle">GOLD</text>
+  <text x="1015" y="92" font-size="13" font-weight="700" fill="#5b3fa0" text-anchor="middle">SERVING</text>
+
+  <!-- ===== BATCH LANE (top) ===== -->
+  <text x="36" y="128" font-size="12" font-weight="700" fill="#2a7">BATCH</text>
+  <!-- landing masters -->
+  <rect x="30" y="135" width="170" height="70" rx="8" fill="#eef0f3" stroke="#c7ccd4"/>
+  <text x="115" y="160" font-size="12" font-weight="600" fill="#333" text-anchor="middle">customers_orgs · users</text>
+  <text x="115" y="178" font-size="12" font-weight="600" fill="#333" text-anchor="middle">billing_monthly</text>
+  <text x="115" y="196" font-size="11" fill="#888" text-anchor="middle">CSV (read-only)</text>
+  <!-- bronze masters -->
+  <rect x="265" y="135" width="170" height="70" rx="8" fill="#f6ead9" stroke="#d8b483"/>
+  <text x="350" y="158" font-size="12" font-weight="600" fill="#5a4326" text-anchor="middle">Parquet tipado</text>
+  <text x="350" y="176" font-size="11" fill="#6a5436" text-anchor="middle">dedup · ingest_ts</text>
+  <text x="350" y="192" font-size="11" fill="#6a5436" text-anchor="middle">billing part. por month</text>
+
+  <!-- ===== STREAM LANE (bottom) ===== -->
+  <text x="36" y="238" font-size="12" font-weight="700" fill="#27a">STREAMING</text>
+  <!-- landing events -->
+  <rect x="30" y="245" width="170" height="70" rx="8" fill="#eef0f3" stroke="#c7ccd4"/>
+  <text x="115" y="270" font-size="12" font-weight="600" fill="#333" text-anchor="middle">usage_events_stream/</text>
+  <text x="115" y="288" font-size="12" font-weight="600" fill="#333" text-anchor="middle">*.jsonl (120 files)</text>
+  <text x="115" y="305" font-size="11" fill="#888" text-anchor="middle">micro-lotes</text>
+  <!-- bronze events -->
+  <rect x="265" y="245" width="170" height="86" rx="8" fill="#f6ead9" stroke="#d8b483"/>
+  <text x="350" y="266" font-size="12" font-weight="600" fill="#5a4326" text-anchor="middle">Structured Streaming</text>
+  <text x="350" y="283" font-size="11" fill="#6a5436" text-anchor="middle">watermark 60d (feed</text>
+  <text x="350" y="297" font-size="11" fill="#6a5436" text-anchor="middle">no ordenado)</text>
+  <text x="350" y="313" font-size="11" fill="#6a5436" text-anchor="middle">dedup event_id</text>
+  <text x="350" y="327" font-size="11" fill="#6a5436" text-anchor="middle">part. por usage_date</text>
+
+  <!-- ===== SILVER (spans both lanes) ===== -->
+  <rect x="500" y="150" width="170" height="180" rx="8" fill="#eef0f1" stroke="#bfc3c8"/>
+  <text x="585" y="174" font-size="12" font-weight="600" fill="#3a3a3a" text-anchor="middle">conformance</text>
+  <text x="585" y="190" font-size="11" fill="#555" text-anchor="middle">(trim/lower)</text>
+  <text x="585" y="210" font-size="12" font-weight="600" fill="#3a3a3a" text-anchor="middle">cast value (fallback)</text>
+  <text x="585" y="232" font-size="12" font-weight="600" fill="#3a3a3a" text-anchor="middle">3 reglas de calidad</text>
+  <text x="585" y="248" font-size="11" fill="#555" text-anchor="middle">+ imputación de unit</text>
+  <text x="585" y="270" font-size="12" font-weight="600" fill="#3a3a3a" text-anchor="middle">broadcast join orgs</text>
+  <text x="585" y="292" font-size="12" font-weight="600" fill="#3a3a3a" text-anchor="middle">features</text>
+  <text x="585" y="308" font-size="11" fill="#555" text-anchor="middle">requests · cpu · tokens</text>
+  <text x="585" y="324" font-size="11" fill="#555" text-anchor="middle">carbon · flags</text>
+
+  <!-- ===== GOLD ===== -->
+  <rect x="715" y="180" width="170" height="120" rx="8" fill="#fbf3d4" stroke="#e3c768"/>
+  <text x="800" y="220" font-size="12" font-weight="700" fill="#6b520a" text-anchor="middle">org_daily_usage</text>
+  <text x="800" y="238" font-size="12" font-weight="700" fill="#6b520a" text-anchor="middle">_by_service</text>
+  <text x="800" y="262" font-size="11" fill="#7a611a" text-anchor="middle">grano: org × service</text>
+  <text x="800" y="277" font-size="11" fill="#7a611a" text-anchor="middle">× día</text>
+  <text x="800" y="293" font-size="11" fill="#7a611a" text-anchor="middle">mart FinOps</text>
+
+  <!-- ===== ASTRADB ===== -->
+  <rect x="930" y="170" width="180" height="140" rx="8" fill="#ece6f7" stroke="#b3a0dd"/>
+  <text x="1020" y="196" font-size="12" font-weight="700" fill="#48317d" text-anchor="middle">AstraDB (Cassandra)</text>
+  <text x="1020" y="218" font-size="11" fill="#5b4a86" text-anchor="middle">tabla query-first</text>
+  <text x="1020" y="238" font-size="10.5" fill="#5b4a86" text-anchor="middle">PK ((org_id),</text>
+  <text x="1020" y="252" font-size="10.5" fill="#5b4a86" text-anchor="middle">usage_date, service)</text>
+  <text x="1020" y="274" font-size="11" fill="#5b4a86" text-anchor="middle">upsert idempotente</text>
+  <text x="1020" y="294" font-size="11" fill="#5b4a86" text-anchor="middle">(driver Python)</text>
+
+  <!-- ===== QUARANTINE ===== -->
+  <rect x="500" y="370" width="170" height="58" rx="8" fill="#fbe6e6" stroke="#e0a3a3"/>
+  <text x="585" y="394" font-size="12" font-weight="700" fill="#9a3a3a" text-anchor="middle">quarantine (Parquet)</text>
+  <text x="585" y="413" font-size="11" fill="#a85454" text-anchor="middle">cost &lt; -0.01 · event_id null</text>
+
+  <!-- ===== QUERIES ===== -->
+  <rect x="900" y="360" width="240" height="48" rx="8" fill="#e2f4f1" stroke="#8fcabf"/>
+  <text x="1020" y="380" font-size="11.5" font-weight="600" fill="#2c6e63" text-anchor="middle">Q1 · costos/requests por org-</text>
+  <text x="1020" y="397" font-size="11.5" font-weight="600" fill="#2c6e63" text-anchor="middle">servicio en rango de fechas</text>
+  <rect x="900" y="416" width="240" height="48" rx="8" fill="#e2f4f1" stroke="#8fcabf"/>
+  <text x="1020" y="436" font-size="11.5" font-weight="600" fill="#2c6e63" text-anchor="middle">Q2 · top-N servicios por costo</text>
+  <text x="1020" y="453" font-size="11.5" font-weight="600" fill="#2c6e63" text-anchor="middle">(últimos 14 días)</text>
+
+  <!-- arrows -->
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="#888"/>
+    </marker>
+  </defs>
+  <g stroke="#888" stroke-width="1.8" fill="none" marker-end="url(#arr)">
+    <!-- landing -> bronze -->
+    <line x1="200" y1="170" x2="262" y2="170"/>
+    <line x1="200" y1="285" x2="262" y2="285"/>
+    <!-- bronze -> silver -->
+    <line x1="435" y1="170" x2="497" y2="200"/>
+    <line x1="435" y1="288" x2="497" y2="270"/>
+    <!-- silver -> gold -->
+    <line x1="670" y1="240" x2="712" y2="240"/>
+    <!-- gold -> astra -->
+    <line x1="885" y1="240" x2="927" y2="240"/>
+    <!-- astra -> queries -->
+    <line x1="1020" y1="310" x2="1020" y2="357"/>
+  </g>
+  <!-- silver -> quarantine (red) -->
+  <line x1="585" y1="330" x2="585" y2="367" stroke="#cc8888" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+  <!-- footnote -->
+  <rect x="30" y="500" width="1100" height="70" rx="8" fill="#ffffff" stroke="#e2e2e8"/>
+  <text x="48" y="524" font-size="12" font-weight="700" fill="#444">Notas de implementación</text>
+  <text x="48" y="544" font-size="11.5" fill="#666">• Data lake (Landing + Bronze/Silver/Gold/quarantine en Parquet) y checkpoint del stream viven en Google Drive → resiliencia si Colab reinicia.</text>
+  <text x="48" y="561" font-size="11.5" fill="#666">• Serving desacoplado: el streaming aterriza eventos crudos en Bronze; un pase batch computa Silver → Gold → Cassandra (idempotencia limpia, sin agregar dentro del stream).</text>
+</svg>
