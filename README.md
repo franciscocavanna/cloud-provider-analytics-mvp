@@ -68,5 +68,3 @@ datalake/
 | Spikes de costo (flag de anomalía) | 54 |
 | Filas Gold (org×servicio×día) | 11.050 |
 | Costo total (check Silver=Gold) | 148.351,58 USD |
-
-Las decisiones de diseño, los trade-offs y un par de cosas a tener en cuenta para la entrega final están en **[DECISIONES.md](DECISIONES.md)**.
